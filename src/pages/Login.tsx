@@ -6,10 +6,17 @@ interface LoginPageProps {
   onLogin: (user: User) => void;
 }
 
-const DEMO_USERS = [
-  { name: "Иванова Мария Сергеевна", role: "nurse" as const, department: "Терапевтическое отделение", password: "nurse123" },
-  { name: "Петров Андрей Николаевич", role: "doctor" as const, department: "Терапевтическое отделение", password: "doctor123" },
-  { name: "Смирнова Елена Викторовна", role: "admin" as const, department: "Администрация", password: "admin123" },
+const USERS = [
+  { name: "Иванова Мария Сергеевна", role: "nurse" as const, department: "Терапевтическое отделение", login: "nurse", password: "nurse123" },
+  { name: "Петров Андрей Николаевич", role: "doctor" as const, department: "Терапевтическое отделение", login: "doctor", password: "doctor123" },
+  { name: "Смирнова Елена Викторовна", role: "admin" as const, department: "Администрация", login: "admin", password: "admin123" },
+];
+
+const AUTHORS = [
+  "А.Н. Леонов",
+  "А.Е. Яблоков",
+  "А.В. Гомжина",
+  "Н.В. Ярочкина",
 ];
 
 export default function LoginPage({ onLogin }: LoginPageProps) {
@@ -22,11 +29,10 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     setTimeout(() => {
-      const found = DEMO_USERS.find(
+      const found = USERS.find(
         (u) => u.password === password && (
-          login === u.role ||
+          login === u.login ||
           u.name.toLowerCase().includes(login.toLowerCase())
         )
       );
@@ -43,8 +49,9 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     <div className="min-h-screen flex" style={{ background: "linear-gradient(135deg, hsl(215 35% 13%), hsl(199 60% 18%), hsl(152 40% 15%))" }}>
       {/* Left panel */}
       <div className="hidden lg:flex flex-col justify-between w-1/2 p-12">
+        {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ background: "linear-gradient(135deg, hsl(199 78% 55%), hsl(152 45% 50%))" }}>
             <Icon name="Heart" size={20} className="text-white" />
           </div>
@@ -54,15 +61,16 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           </div>
         </div>
 
+        {/* Center content */}
         <div className="space-y-8">
           <div>
             <h1 className="text-4xl font-bold text-white leading-tight mb-4">
-              Автоматизация<br />
-              сестринского<br />
-              <span style={{ color: "hsl(199 78% 65%)" }}>ухода</span>
+              Программа для<br />
+              автоматизации<br />
+              <span style={{ color: "hsl(199 78% 65%)" }}>сестринского ухода</span>
             </h1>
             <p className="text-white/60 text-lg leading-relaxed">
-              Комплексная система для организации и оптимизации работы среднего медицинского персонала
+              На основе метода Леоновой А.Ф. — комплексная система организации и оптимизации работы среднего медицинского персонала
             </p>
           </div>
 
@@ -74,7 +82,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               { icon: "BarChart3", label: "Аналитика и отчёты" },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.06)" }}>
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(199 78% 38% / 0.3)" }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "hsl(199 78% 38% / 0.3)" }}>
                   <Icon name={item.icon} size={16} style={{ color: "hsl(199 78% 70%)" }} />
                 </div>
                 <span className="text-white/70 text-sm">{item.label}</span>
@@ -83,20 +91,42 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           </div>
         </div>
 
-        <p className="text-white/30 text-sm">© 2026 Оптимальный уход. Медицинская информационная система.</p>
+        {/* Authors block */}
+        <div className="space-y-3">
+          <div className="h-px" style={{ background: "rgba(255,255,255,0.12)" }} />
+          <div>
+            <p className="text-white/40 text-xs font-medium uppercase tracking-wider mb-2">Авторы программы</p>
+            <div className="flex flex-wrap gap-2">
+              {AUTHORS.map((author) => (
+                <span
+                  key={author}
+                  className="px-3 py-1 rounded-full text-sm font-medium text-white/80"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
+                >
+                  {author}
+                </span>
+              ))}
+            </div>
+          </div>
+          <p className="text-white/25 text-xs">© 2026 «Оптимальный уход». Медицинская информационная система.</p>
+        </div>
       </div>
 
-      {/* Right panel - Login form */}
+      {/* Right panel */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md animate-fade-in">
           <div className="bg-white rounded-2xl p-8 shadow-2xl">
             <div className="mb-8">
+              {/* Mobile logo */}
               <div className="lg:hidden flex items-center gap-3 mb-6">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center"
                   style={{ background: "linear-gradient(135deg, hsl(199 78% 38%), hsl(152 45% 40%))" }}>
                   <Icon name="Heart" size={16} className="text-white" />
                 </div>
-                <p className="font-semibold text-sm">Оптимальный уход</p>
+                <div>
+                  <p className="font-semibold text-sm">Оптимальный уход</p>
+                  <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>Метод Леоновой А.Ф.</p>
+                </div>
               </div>
               <h2 className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>Вход в систему</h2>
               <p className="text-sm mt-1" style={{ color: "hsl(var(--muted-foreground))" }}>
@@ -115,15 +145,11 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                     type="text"
                     value={login}
                     onChange={(e) => setLogin(e.target.value)}
-                    placeholder="nurse / doctor / admin"
+                    placeholder="Введите логин"
                     className="w-full pl-9 pr-4 py-2.5 rounded-lg border text-sm outline-none transition-all"
-                    style={{
-                      borderColor: "hsl(var(--border))",
-                      background: "hsl(var(--background))",
-                      color: "hsl(var(--foreground))",
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = "hsl(var(--primary))"}
-                    onBlur={(e) => e.target.style.borderColor = "hsl(var(--border))"}
+                    style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--background))", color: "hsl(var(--foreground))" }}
+                    onFocus={(e) => (e.target.style.borderColor = "hsl(var(--primary))")}
+                    onBlur={(e) => (e.target.style.borderColor = "hsl(var(--border))")}
                   />
                 </div>
               </div>
@@ -140,13 +166,9 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     className="w-full pl-9 pr-4 py-2.5 rounded-lg border text-sm outline-none transition-all"
-                    style={{
-                      borderColor: "hsl(var(--border))",
-                      background: "hsl(var(--background))",
-                      color: "hsl(var(--foreground))",
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = "hsl(var(--primary))"}
-                    onBlur={(e) => e.target.style.borderColor = "hsl(var(--border))"}
+                    style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--background))", color: "hsl(var(--foreground))" }}
+                    onFocus={(e) => (e.target.style.borderColor = "hsl(var(--primary))")}
+                    onBlur={(e) => (e.target.style.borderColor = "hsl(var(--border))")}
                   />
                 </div>
               </div>
@@ -163,34 +185,15 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 disabled={loading}
                 className="btn-primary w-full justify-center py-2.5 mt-2"
               >
-                {loading ? (
-                  <Icon name="Loader2" size={16} className="animate-spin" />
-                ) : (
-                  <Icon name="LogIn" size={16} />
-                )}
+                {loading ? <Icon name="Loader2" size={16} className="animate-spin" /> : <Icon name="LogIn" size={16} />}
                 {loading ? "Вход..." : "Войти в систему"}
               </button>
             </form>
 
-            <div className="mt-6 p-4 rounded-xl" style={{ background: "hsl(var(--muted))" }}>
-              <p className="text-xs font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Демо-доступ:</p>
-              <div className="space-y-1.5">
-                {[
-                  { login: "nurse", pass: "nurse123", label: "Медсестра" },
-                  { login: "doctor", pass: "doctor123", label: "Врач" },
-                  { login: "admin", pass: "admin123", label: "Администратор" },
-                ].map((d) => (
-                  <button
-                    key={d.login}
-                    onClick={() => { setLogin(d.login); setPassword(d.pass); }}
-                    className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs transition-colors hover:bg-white"
-                    style={{ color: "hsl(var(--foreground))" }}
-                  >
-                    <span className="font-medium">{d.label}</span>
-                    <span style={{ color: "hsl(var(--muted-foreground))" }}>{d.login} / {d.pass}</span>
-                  </button>
-                ))}
-              </div>
+            {/* Mobile authors */}
+            <div className="lg:hidden mt-6 pt-5 border-t" style={{ borderColor: "hsl(var(--border))" }}>
+              <p className="text-xs font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Авторы программы:</p>
+              <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>{AUTHORS.join(" · ")}</p>
             </div>
           </div>
         </div>

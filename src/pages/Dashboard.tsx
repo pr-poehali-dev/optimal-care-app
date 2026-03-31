@@ -1,5 +1,7 @@
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { User, ROLE_LABELS } from "@/App";
+import Modal from "@/components/Modal";
 
 interface DashboardProps {
   user: User;
@@ -43,7 +45,14 @@ const PRIORITY_DOT: Record<string, string> = {
   critical: "hsl(var(--med-danger))",
 };
 
+const NOTIFICATIONS = [
+  { id: 1, text: "Белова С.Ю. — SpO₂ снизилось до 88%", time: "10:32", type: "critical" },
+  { id: 2, text: "Плановое вмешательство Козлова Н.И. через 15 мин", time: "10:15", type: "warning" },
+  { id: 3, text: "Фёдоров В.П. — АД снизилось после приёма препарата", time: "09:48", type: "info" },
+];
+
 export default function DashboardPage({ user, onNavigate }: DashboardProps) {
+  const [notifOpen, setNotifOpen] = useState(false);
   const now = new Date();
   const timeStr = now.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
@@ -65,9 +74,13 @@ export default function DashboardPage({ user, onNavigate }: DashboardProps) {
               {ROLE_LABELS[user.role]} · {user.department}
             </p>
           </div>
-          <button className="p-2 rounded-lg border transition-colors hover:bg-muted relative" style={{ borderColor: "hsl(var(--border))" }}>
+          <button
+            onClick={() => setNotifOpen(true)}
+            className="p-2 rounded-lg border transition-colors hover:bg-muted relative"
+            style={{ borderColor: "hsl(var(--border))" }}
+          >
             <Icon name="Bell" size={16} style={{ color: "hsl(var(--muted-foreground))" }} />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ background: "hsl(var(--med-danger))" }}></span>
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ background: "hsl(var(--med-danger))" }} />
           </button>
         </div>
       </div>
@@ -77,7 +90,10 @@ export default function DashboardPage({ user, onNavigate }: DashboardProps) {
         {/* Stats grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {STATS.map((stat) => (
-            <div key={stat.label} className="stat-card">
+            <div key={stat.label} className="stat-card cursor-pointer" onClick={() => {
+              if (stat.icon === "Users") onNavigate("patients");
+              else if (stat.icon === "ClipboardList") onNavigate("interventions");
+            }}>
               <div className="flex items-start justify-between mb-3">
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: stat.bg }}>
                   <Icon name={stat.icon} size={18} style={{ color: stat.color }} />
@@ -101,9 +117,13 @@ export default function DashboardPage({ user, onNavigate }: DashboardProps) {
             </div>
             <div className="divide-y" style={{ borderColor: "hsl(var(--border))" }}>
               {RECENT_PATIENTS.map((p) => (
-                <div key={p.id} className="data-table-row px-5 py-3 flex items-center gap-4">
+                <div
+                  key={p.id}
+                  className="data-table-row px-5 py-3 flex items-center gap-4 cursor-pointer"
+                  onClick={() => onNavigate("patients")}
+                >
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <div className="w-2 h-2 rounded-full" style={{ background: PRIORITY_DOT[p.priority] }}></div>
+                    <div className="w-2 h-2 rounded-full" style={{ background: PRIORITY_DOT[p.priority] }} />
                     <span className="text-xs font-mono" style={{ color: "hsl(var(--muted-foreground))" }}>{p.id}</span>
                   </div>
                   <div className="flex-1 min-w-0">
@@ -176,6 +196,36 @@ export default function DashboardPage({ user, onNavigate }: DashboardProps) {
           </div>
         </div>
       </div>
+
+      {/* Notifications modal */}
+      <Modal open={notifOpen} onClose={() => setNotifOpen(false)} title="Уведомления">
+        <div className="p-5 space-y-3">
+          {NOTIFICATIONS.map((n) => (
+            <div key={n.id} className="flex items-start gap-3 p-3 rounded-xl border" style={{ borderColor: "hsl(var(--border))" }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{
+                  background: n.type === "critical" ? "hsl(0 72% 92%)" : n.type === "warning" ? "hsl(38 90% 92%)" : "hsl(var(--med-light))",
+                }}>
+                <Icon
+                  name={n.type === "critical" ? "AlertCircle" : n.type === "warning" ? "AlertTriangle" : "Info"}
+                  size={16}
+                  style={{ color: n.type === "critical" ? "hsl(var(--med-danger))" : n.type === "warning" ? "hsl(38 90% 35%)" : "hsl(var(--primary))" }}
+                />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm" style={{ color: "hsl(var(--foreground))" }}>{n.text}</p>
+                <p className="text-xs mt-1" style={{ color: "hsl(var(--muted-foreground))" }}>{n.time}</p>
+              </div>
+            </div>
+          ))}
+          <button
+            onClick={() => setNotifOpen(false)}
+            className="btn-secondary w-full justify-center mt-2"
+          >
+            Закрыть
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
