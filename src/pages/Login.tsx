@@ -12,12 +12,6 @@ const USERS = [
   { name: "Смирнова Елена Викторовна", role: "admin" as const, department: "Администрация", login: "admin", password: "admin123" },
 ];
 
-const AUTHORS = [
-  "А.Н. Леонов",
-  "А.Е. Яблоков",
-  "А.В. Гомжина",
-  "Н.В. Ярочкина",
-];
 
 export default function LoginPage({ onLogin }: LoginPageProps) {
   const [login, setLogin] = useState("");
@@ -91,25 +85,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           </div>
         </div>
 
-        {/* Authors block */}
-        <div className="space-y-3">
-          <div className="h-px" style={{ background: "rgba(255,255,255,0.12)" }} />
-          <div>
-            <p className="text-white/40 text-xs font-medium uppercase tracking-wider mb-2">Авторы программы</p>
-            <div className="flex flex-wrap gap-2">
-              {AUTHORS.map((author) => (
-                <span
-                  key={author}
-                  className="px-3 py-1 rounded-full text-sm font-medium text-white/80"
-                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}
-                >
-                  {author}
-                </span>
-              ))}
-            </div>
-          </div>
-          <p className="text-white/25 text-xs">© 2026 «Оптимальный уход». Медицинская информационная система.</p>
-        </div>
+
       </div>
 
       {/* Right panel */}
