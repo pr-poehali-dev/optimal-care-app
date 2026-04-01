@@ -6,6 +6,11 @@ interface LoginPageProps {
   onLogin: (user: User) => void;
 }
 
+const AUTHORS = [
+  "Леонова А.Ф.",
+  "Кафедра сестринского дела",
+];
+
 const USERS = [
   { name: "Иванова Мария Сергеевна", role: "nurse" as const, department: "Терапевтическое отделение", login: "nurse", password: "nurse123" },
   { name: "Петров Андрей Николаевич", role: "doctor" as const, department: "Терапевтическое отделение", login: "doctor", password: "doctor123" },
