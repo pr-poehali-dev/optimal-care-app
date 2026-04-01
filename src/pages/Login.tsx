@@ -6,10 +6,7 @@ interface LoginPageProps {
   onLogin: (user: User) => void;
 }
 
-const AUTHORS = [
-  "Леонова А.Ф.",
-  "Кафедра сестринского дела",
-];
+const AUTHORS = "А.Н. Леонов, А.Е. Яблоков, А.В. Гомжина, Н.В. Ярочкина";
 
 const USERS = [
   { name: "Иванова Мария Сергеевна", role: "nurse" as const, department: "Терапевтическое отделение", login: "nurse", password: "nurse123" },
@@ -90,6 +87,12 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           </div>
         </div>
 
+        {/* Desktop authors */}
+        <div>
+          <p className="text-xs text-white/50">
+            <span className="font-medium text-white/70">Авторы программы:</span> {AUTHORS}
+          </p>
+        </div>
 
       </div>
 
@@ -173,8 +176,9 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
 
             {/* Mobile authors */}
             <div className="lg:hidden mt-6 pt-5 border-t" style={{ borderColor: "hsl(var(--border))" }}>
-              <p className="text-xs font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Авторы программы:</p>
-              <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>{AUTHORS.join(" · ")}</p>
+              <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
+                <span className="font-medium">Авторы программы:</span> {AUTHORS}
+              </p>
             </div>
           </div>
         </div>
