@@ -6,7 +6,7 @@ interface LoginPageProps {
   onLogin: (user: User) => void;
 }
 
-const AUTHORS = "Д.И. Азаров, А.Н. Леонов, А.Е. Яблоков, А.В. Иващенко";
+const AUTHORS = "Азаров Дмитрий Игоревич, Леонов Александр Николаевич, Яблоков Алексей Евгеньевич, Иващенко Александр Валериевич";
 
 const USERS = [
   { name: "Иванова Мария Сергеевна", role: "nurse" as const, department: "Терапевтическое отделение", login: "nurse", password: "nurse123" },
